@@ -100,14 +100,14 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 		NotificationCompat.Builder mBuilder =
 			new NotificationCompat.Builder(context)
-				.setDefaults(defaults)
-				.setSmallIcon(context.getApplicationInfo().icon)
-				.setWhen(System.currentTimeMillis())
-				.setContentTitle(extras.getString("title"))
-				.setTicker(extras.getString("title"))
-				.setContentIntent(contentIntent)
-                .setGroup(extras.getString("group"))
-				.setAutoCancel(true);
+            .setDefaults(defaults)
+            .setSmallIcon(context.getApplicationInfo().icon)
+            .setGroup(extras.getString("group"))
+            .setWhen(System.currentTimeMillis())
+            .setContentTitle(extras.getString("title"))
+            .setTicker(extras.getString("title"))
+            .setContentIntent(contentIntent)
+            .setAutoCancel(true);
 
 		String message = extras.getString("message");
 		if (message != null) {
