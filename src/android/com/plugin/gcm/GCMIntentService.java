@@ -116,7 +116,8 @@ public class GCMIntentService extends GCMBaseIntentService {
             .setAutoCancel(true);
 
         if (true || extras.getString("image_url") != null){
-            URL url = new URL("https://https://hearths3-kaleidosllc.netdna-ssl.com/profile/4.jpg"); //extras.getString("image_url"));
+            //extras.getString("image_url"));
+            URL url = new URL("https://hearths3-kaleidosllc.netdna-ssl.com/profile/4.jpg");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setDoInput(true);
             connection.connect();
