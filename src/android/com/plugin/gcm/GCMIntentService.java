@@ -117,13 +117,16 @@ public class GCMIntentService extends GCMBaseIntentService {
 
         if (true || extras.getString("image_url") != null){
             //extras.getString("image_url"));
-            URL url = new URL("https://hearths3-kaleidosllc.netdna-ssl.com/profile/4.jpg");
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap bitmap = BitmapFactory.decodeStream(input);
-            mBuilder.setLargeIcon(bitmap);
+
+            try {
+                URL url = new URL("https://hearths3-kaleidosllc.netdna-ssl.com/profile/4.jpg");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                Bitmap bitmap = BitmapFactory.decodeStream(input);
+                mBuilder.setLargeIcon(bitmap);
+            } catch (Exception e) {}
         }
 
 		String message = extras.getString("message");
