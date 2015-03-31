@@ -98,16 +98,26 @@ public class GCMIntentService extends GCMBaseIntentService {
 			} catch (NumberFormatException e) {}
 		}
 
+
 		NotificationCompat.Builder mBuilder =
 			new NotificationCompat.Builder(context)
             .setDefaults(defaults)
             .setSmallIcon(context.getApplicationInfo().icon)
-            .setGroup(extras.getString("group"))
             .setWhen(System.currentTimeMillis())
             .setContentTitle(extras.getString("title"))
             .setTicker(extras.getString("title"))
             .setContentIntent(contentIntent)
             .setAutoCancel(true);
+
+        if (true || extras.getString("image_url") != null){
+            URL url = new URL("https://https://hearths3-kaleidosllc.netdna-ssl.com/profile/4.jpg"); //extras.getString("image_url"));
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap bitmap = BitmapFactory.decodeStream(input);
+            mBuilder.setLargeIcon(bitmap);
+        }
 
 		String message = extras.getString("message");
 		if (message != null) {
