@@ -20,6 +20,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import com.google.android.gcm.GCMBaseIntentService;
+import org.json.*;
+
+
 
 @SuppressLint("NewApi")
 public class GCMIntentService extends GCMBaseIntentService {
@@ -104,6 +107,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 			} catch (NumberFormatException e) {}
 		}
 
+        JSONObject obj = new JSONObject(extras.getString("message"));
+        //        String pageName = obj.getString("pageName");//.getJSONObject("pageInfo").getString("pageName");
 
 		NotificationCompat.Builder mBuilder =
 			new NotificationCompat.Builder(context)
@@ -115,11 +120,11 @@ public class GCMIntentService extends GCMBaseIntentService {
             .setContentIntent(contentIntent)
             .setAutoCancel(true);
 
-        if (true || extras.getString("image_url") != null){
+        if (true || obj.getString("image") != null){
             //extras.getString("image_url"));
 
             try {
-                URL url = new URL("https://hearths3-kaleidosllc.netdna-ssl.com/profile/4.jpg");
+                URL url = new URL(obj.getString("image"));
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoInput(true);
                 connection.connect();
@@ -129,7 +134,7 @@ public class GCMIntentService extends GCMBaseIntentService {
             } catch (Exception e) {}
         }
 
-		String message = extras.getString("message");
+		String message = obj.getString("message");
 		if (message != null) {
 			mBuilder.setContentText(message);
 		} else {
