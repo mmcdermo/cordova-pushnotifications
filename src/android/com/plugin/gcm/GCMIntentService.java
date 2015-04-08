@@ -107,11 +107,13 @@ public class GCMIntentService extends GCMBaseIntentService {
 			} catch (NumberFormatException e) {}
 		}
 
+        String image = null;
+        String message = null;
         try {
             JSONObject obj = new JSONObject(extras.getString("message"));
             //        String pageName = obj.getString("pageName");//.getJSONObject("pageInfo").getString("pageName");
-            String image = obj.getString("image");
-            String message = obj.getString("message");
+            image = obj.getString("image");
+            message = obj.getString("message");
         } catch (Exception e) {}
 
         NotificationCompat.Builder mBuilder =
