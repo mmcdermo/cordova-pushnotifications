@@ -107,10 +107,14 @@ public class GCMIntentService extends GCMBaseIntentService {
 			} catch (NumberFormatException e) {}
 		}
 
-        JSONObject obj = new JSONObject(extras.getString("message"));
-        //        String pageName = obj.getString("pageName");//.getJSONObject("pageInfo").getString("pageName");
+        try {
+            JSONObject obj = new JSONObject(extras.getString("message"));
+            //        String pageName = obj.getString("pageName");//.getJSONObject("pageInfo").getString("pageName");
+            String image = obj.getString("image");
+            String message = obj.getString("message");
+        } catch (Exception e) {}
 
-		NotificationCompat.Builder mBuilder =
+        NotificationCompat.Builder mBuilder =
 			new NotificationCompat.Builder(context)
             .setDefaults(defaults)
             .setSmallIcon(context.getApplicationInfo().icon)
@@ -120,11 +124,10 @@ public class GCMIntentService extends GCMBaseIntentService {
             .setContentIntent(contentIntent)
             .setAutoCancel(true);
 
-        if (true || obj.getString("image") != null){
+        if (true || image != null){
             //extras.getString("image_url"));
-
             try {
-                URL url = new URL(obj.getString("image"));
+                URL url = new URL(image);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoInput(true);
                 connection.connect();
@@ -134,7 +137,6 @@ public class GCMIntentService extends GCMBaseIntentService {
             } catch (Exception e) {}
         }
 
-		String message = obj.getString("message");
 		if (message != null) {
 			mBuilder.setContentText(message);
 		} else {
