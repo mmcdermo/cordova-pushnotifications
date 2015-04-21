@@ -116,12 +116,10 @@ public class GCMIntentService extends GCMBaseIntentService {
             //message = obj.getString("message");
         } catch (Exception e) {}
 
-        auto ico = getResources().getIdentifier("logo", "drawable","com.kaleidos.hearth");
-
         NotificationCompat.Builder mBuilder =
 			new NotificationCompat.Builder(context)
             .setDefaults(defaults)
-            .setSmallIcon(ico)
+            .setSmallIcon(getResources().getIdentifier("logo", "drawable","com.kaleidos.hearth"))
             .setWhen(System.currentTimeMillis())
             .setContentTitle(extras.getString("title"))
             .setTicker(extras.getString("title"))
