@@ -108,28 +108,30 @@ public class GCMIntentService extends GCMBaseIntentService {
 		}
 
         String image = null;
-        String message = null;
+        String message = extras.getString("message");
         try {
-            JSONObject obj = new JSONObject(extras.getString("message"));
+            //JSONObject obj = new JSONObject(extras.getString("message"));
             //        String pageName = obj.getString("pageName");//.getJSONObject("pageInfo").getString("pageName");
-            image = obj.getString("image");
-            message = obj.getString("message");
+            //image = obj.getString("image");
+            //message = obj.getString("message");
         } catch (Exception e) {}
+
+        auto ico = getResources().getIdentifier("logo", "drawable","com.kaleidos.hearth");
 
         NotificationCompat.Builder mBuilder =
 			new NotificationCompat.Builder(context)
             .setDefaults(defaults)
-            .setSmallIcon(context.getApplicationInfo().icon)
+            .setSmallIcon(ico)
             .setWhen(System.currentTimeMillis())
             .setContentTitle(extras.getString("title"))
             .setTicker(extras.getString("title"))
             .setContentIntent(contentIntent)
             .setAutoCancel(true);
 
-        if (true || image != null){
+        if (extras.getString("image") != null){
             //extras.getString("image_url"));
             try {
-                URL url = new URL(image);
+                URL url = new URL(extras.getString("image"));
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoInput(true);
                 connection.connect();
