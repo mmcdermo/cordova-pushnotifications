@@ -110,10 +110,10 @@ public class GCMIntentService extends GCMBaseIntentService {
         String image = null;
         String message = extras.getString("message");
         try {
-            //JSONObject obj = new JSONObject(extras.getString("message"));
+            JSONObject obj = new JSONObject(extras.getString("message"));
             //        String pageName = obj.getString("pageName");//.getJSONObject("pageInfo").getString("pageName");
-            //image = obj.getString("image");
-            //message = obj.getString("message");
+            image = obj.getString("image");
+            message = obj.getString("message");
         } catch (Exception e) {}
 
         NotificationCompat.Builder mBuilder =
@@ -126,10 +126,9 @@ public class GCMIntentService extends GCMBaseIntentService {
             .setContentIntent(contentIntent)
             .setAutoCancel(true);
 
-        if (extras.getString("image") != null){
-            //extras.getString("image_url"));
+        if (image != null){
             try {
-                URL url = new URL(extras.getString("image"));
+                URL url = new URL(image);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setDoInput(true);
                 connection.connect();
