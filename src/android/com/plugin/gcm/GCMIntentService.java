@@ -109,6 +109,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
         String image = null;
         String message = extras.getString("message");
+        Log.d("kaleidos_debug", message);
         try {
             JSONObject obj = new JSONObject(extras.getString("message"));
             //        String pageName = obj.getString("pageName");//.getJSONObject("pageInfo").getString("pageName");
