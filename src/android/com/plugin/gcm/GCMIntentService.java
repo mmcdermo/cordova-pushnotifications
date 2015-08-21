@@ -18,6 +18,7 @@ import android.util.Log;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.lang.Integer;
 
 import com.google.android.gcm.GCMBaseIntentService;
 import org.json.*;
@@ -110,6 +111,12 @@ public class GCMIntentService extends GCMBaseIntentService {
         String image = null;
         String message = extras.getString("message");
         Log.d("kaleidos_debug", message);
+        Log.d("kaleidos_debug", appName);
+        Log.d("kaleidos_debug", extras.getString("title"));
+        Log.d("kaleidos_debug", extras.getString("msgcnt"));
+        Log.d("kaleidos_debug", extras.getString("notId"));
+        Log.d("kaleidos_debug", Integer.toString(defaults));
+
         try {
             JSONObject obj = new JSONObject(extras.getString("message"));
             //        String pageName = obj.getString("pageName");//.getJSONObject("pageInfo").getString("pageName");
@@ -117,15 +124,28 @@ public class GCMIntentService extends GCMBaseIntentService {
             message = obj.getString("message");
         } catch (Exception e) {}
 
-        NotificationCompat.Builder mBuilder =
-			new NotificationCompat.Builder(context)
-            .setDefaults(defaults)
-            .setSmallIcon(getResources().getIdentifier("logo", "drawable","com.kaleidos.hearth"))
+
+        /*********************** Trillbies R US*/
+        //int icon = R.drawable.ic_launcher;
+        int icon = getResources().getIdentifier("logo", "drawable","com.kaleidos.hearth");
+        long when = System.currentTimeMillis();
+        NotificationManager notificationManager = (NotificationManager)
+            context.getSystemService(Context.NOTIFICATION_SERVICE);
+        String title = "Hearth";//R.string.app_name);
+
+        Intent _notificationIntent = new Intent(context, PushHandlerActivity.class);
+        // set intent so it does not start a new activity
+        _notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                                    Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent intent =
+            PendingIntent.getActivity(context, 0, _notificationIntent, 0);
+
+
+        Notification.Builder builder = new Notification.Builder(context)
+            .setContentTitle("Hearth")
+            .setContentText(message)
             .setWhen(System.currentTimeMillis())
-            .setContentTitle(extras.getString("title"))
-            .setTicker(extras.getString("title"))
-            .setContentIntent(contentIntent)
-            .setAutoCancel(true);
+            .setSmallIcon(icon);
 
         if (image != null){
             try {
@@ -135,34 +155,22 @@ public class GCMIntentService extends GCMBaseIntentService {
                 connection.connect();
                 InputStream input = connection.getInputStream();
                 Bitmap bitmap = BitmapFactory.decodeStream(input);
-                mBuilder.setLargeIcon(bitmap);
+                //notification.setStyle(new Notification.BigPictureStyle()
+                //.bigPicture(bitmap));
+                builder.setLargeIcon(bitmap);
             } catch (Exception e) {}
-        }
+         }
 
-		if (message != null) {
-			mBuilder.setContentText(message);
-		} else {
-			mBuilder.setContentText("<missing message content>");
-		}
+        Notification notification = builder.build();
+        notification.setLatestEventInfo(context, title, message, intent);
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
-		String msgcnt = extras.getString("msgcnt");
-		if (msgcnt != null) {
-			mBuilder.setNumber(Integer.parseInt(msgcnt));
-		}
+        // Play default notification sound
+        notification.defaults |= Notification.DEFAULT_SOUND;
 
-		int notId = 0;
-
-		try {
-			notId = Integer.parseInt(extras.getString("notId"));
-		}
-		catch(NumberFormatException e) {
-			Log.e(TAG, "Number format exception - Error parsing Notification ID: " + e.getMessage());
-		}
-		catch(Exception e) {
-			Log.e(TAG, "Number format exception - Error parsing Notification ID" + e.getMessage());
-		}
-
-		mNotificationManager.notify((String) appName, notId, mBuilder.build());
+        // Vibrate if vibrate is enabled
+        notification.defaults |= Notification.DEFAULT_VIBRATE;
+        notificationManager.notify(0, notification);
 	}
 
 	private static String getAppName(Context context)
